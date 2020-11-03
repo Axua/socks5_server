@@ -159,9 +159,10 @@ int socks5_connect(int cli_sock, struct sockaddr_in cli_addr){
     saddr.sin_addr = request->dst_addr;
     saddr.sin_port = request->dst_port;
 
+    pthread_mutex_lock(&lock);
     printf("[+] %s:%d -> ", inet_ntoa(cli_addr.sin_addr), ntohs(cli_addr.sin_port));
     printf("%s:%d\n", inet_ntoa(saddr.sin_addr), ntohs(saddr.sin_port));
-
+    pthread_mutex_unlock(&lock);
     state = connect(target_sock, (struct sockaddr*)&saddr, sizeof(struct sockaddr));
 
     response.version = VERSION_SOCKS5;
@@ -173,7 +174,7 @@ int socks5_connect(int cli_sock, struct sockaddr_in cli_addr){
 
     sock_write(cli_sock, (void*)&response, sizeof(struct ipv4_response));
 
-
+    free(request);
 
     return target_sock;
 }
