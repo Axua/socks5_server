@@ -295,8 +295,6 @@ void socks5_proxy(int16_t lport){
 }
 
 int main(int argc, char**argv){
-    
-    int srvsock;
     int port;
 
     setbuf(stdout, NULL);
